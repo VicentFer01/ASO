@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 for entrada in prueba_bash/*; do
     if [[ -e "$entrada" ]]; then
         nombre=$(basename "$entrada")
