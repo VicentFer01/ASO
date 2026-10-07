@@ -1,3 +1,4 @@
+
 user_valido=0
 
 re='^[a-z][a-z0-9]*'
