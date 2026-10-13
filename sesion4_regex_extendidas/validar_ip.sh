@@ -2,7 +2,7 @@
 
 exp='^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}'
 
-if [[ $# -eq 0 ]];
+if [[ $# -ne 0 ]];
     then
         echo "no has introducido el parametro"
     else 
