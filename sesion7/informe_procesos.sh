@@ -14,9 +14,10 @@ mostrar_menu() {
 
 validar_pid() {
     if ps -p $pid_prioridad;
-        return 0
+        then
+            return 0
     else
-        return 1
+            return 1
     fi 
 }
 
@@ -49,15 +50,30 @@ cambiar_prioridad() {
     read -p "Nueva prioridad: " prioridad
     read -p "PID Proceso: " pid_prioridad
 
-    existe_pid=$(validar_pid $pid_prioridad)
-
-    if [[ existe_pid == 1 ]];
+    if validar_pid "$pid_prioridad"; 
         then
-            
+            if [[ $EUID -eq 0 ]]; 
+                then
+                    if (( prioridad >= -20 && prioridad <= 19 )); 
+                        then
+                            renice --priority "$prioridad" -p "$pid_prioridad"
+                    else
+                        echo "La prioridad para root debe estar entre -20 y 19"
+                    fi
 
+            else
+                if (( prioridad >= 0 && prioridad <= 19 )); 
+                    then
+                        renice --priority "$prioridad" -p "$pid_prioridad"
+                else
+                    echo "La prioridad debe estar entre 0 y 19"
+                fi
 
-    
-    
+            fi
+
+    else
+        echo "Ese PID no existe"
+    fi
 }
 
 mostar_procesoCPU() {
@@ -67,7 +83,24 @@ mostar_procesoCPU() {
 
 finalizar_proceso() {
     read -p "PID Proceso: " pid_matar;
-    kill $pid_matar
+    read -p "Seguro que quieres acabar el proceso (s/n) " confirmar;
+
+
+    if validar_pid "$pid_prioridad"; 
+        then
+            if [[ $confirmar == "s" ]];
+                then
+                    kill $pid_matar
+                    echo "Se ha matado el proceso $pid_matar ";
+            elif [[ $confirmar == "n" ]];
+                then
+                    echo "Cancelando..";
+            else
+                echo "Opcion no valida";
+            fi
+    else
+        echo "No existe es PID";
+    fi
 }
 
 
