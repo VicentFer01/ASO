@@ -11,27 +11,58 @@ mostrar_menu() {
 }
 
 
+
+validar_pid() {
+    if ps -p $pid_prioridad;
+        return 0
+    else
+        return 1
+    fi 
+}
+
+
 listar_procesos_user() {
-    echo "Introduce user: "
     read -p "User: " user
-    ps -u $user
+
+    if id "$user"; 
+        then
+            echo "User existe";
+            ps -u "$user"
+    
+    else
+        echo "Ese user no existe";
+    fi
 }
 
 buscar_proceso_user() {
     read -p "Nombre proceso": nombre_proceso;
-    ps -C $nombre_proceso
+
+    if ps -C $nombre_proceso;
+        then
+            echo "Se han encontrado matches";
+    else
+        echo "No existen procesos con ese nombre";
+    fi
 }
 
 cambiar_prioridad() {
     read -p "Nueva prioridad: " prioridad
     read -p "PID Proceso: " pid_prioridad
 
-    renice -n $prioridad -p $pid_prioridad
+    existe_pid=$(validar_pid $pid_prioridad)
+
+    if [[ existe_pid == 1 ]];
+        then
+            
+
+
+    
+    
 }
 
 mostar_procesoCPU() {
-    ps -eo pid,user,%cpu,comm --sort=-%cpu
-}
+    ps -eo pid,user,%cpu,comm --sort=-%cpu | head -n 10
+}   
 
 
 finalizar_proceso() {
