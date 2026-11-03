@@ -110,7 +110,6 @@ while [[ $option -ne 6 ]]; do
         read -p "Opcion: " option;
 
         case $option in
-
         1) listar_procesos_user ;;
         2) buscar_proceso_user ;;
         3) mostar_procesoCPU ;;
